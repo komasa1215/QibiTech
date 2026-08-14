@@ -1,0 +1,57 @@
+{
+    "objects": [
+        { "source": "lamp", "class": "Lamp", "name": "lamp"}
+    ],
+    "states": [
+        {
+        "name": "ROOT",
+        "parent": "",
+        "children": ["POWER OFF", "POWER ON"],
+        "default_child": 0,
+        "transitions": [ ],
+        "do_entry": [],
+        "do_while": [ "print('ルートの活性化中の活動')" ],
+        "do_exit": []
+        },
+        {
+        "name": "POWER OFF",
+        "parent": "ROOT",
+        "children": [],
+        "default_child": -1,
+        "transitions": [ { "target": "POWER ON",  "trigger": "SW_ON" } ],
+        "do_entry": [],
+        "do_while": [],
+        "do_exit": []
+        },
+        {
+        "name": "POWER ON",
+        "parent": "ROOT",
+        "children": ["LAMP ON", "LAMP OFF"],
+        "default_child": 1,
+        "transitions": [ { "target": "POWER OFF",  "trigger": "SW_OFF" } ],
+        "do_entry": [],
+        "do_while": [],
+        "do_exit": []
+        },
+        {
+        "name": "LAMP OFF",
+        "parent": "POWER ON",
+        "children": [],
+        "default_child": -1,
+        "transitions": [ { "target": "LAMP ON",  "trigger": "BTN_PUSH" } ],
+        "do_entry": [ "print('ランプ消灯')", "self.lamp.off()" ],
+        "do_while": [],
+        "do_exit": []
+        },
+        {
+        "name": "LAMP ON",
+        "parent": "POWER ON",
+        "children": [],
+        "default_child": -1,
+        "transitions": [ { "target": "LAMP OFF",  "trigger": "BTN_PUSH" } ],
+        "do_entry": [ "print('ランプ点灯')", "self.lamp.on()" ],
+        "do_while": [],
+        "do_exit": []
+        }
+    ]
+}
