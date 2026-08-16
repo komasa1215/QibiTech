@@ -1,0 +1,58 @@
+@startuml
+
+class State {
+    - _name: str
+    - _parent: str
+    - _children: list[str]
+    - _default_child_idx: int
+    - _transitions: list[TransitionInfo]
+    - _entry_activity: str
+    - _while_activity: str
+    - _exit_activity: str
+
+    + __init__(name: str, parent: str, objects): None
+    + get_name(): str
+    + get_parent_name(): str
+    + get_default_child_name(): str
+    + add_child(child: str, default: bool = False): None
+    + add_transition(transition: TransitionInfo): None
+    + define_entry_activity(activity: list[str]): None
+    + define_while_activity(activity: list[str]): None
+    + define_exit_activity(activity: list[str]): None
+    + on_entry(): None
+    + on_while(): None
+    + on_exit(): None
+}
+class TransitionInfo {
+    - _target: str
+    - _trigger: str
+
+    + __init__(target: str, trigger: str): None
+    + condition(): bool
+}
+class StateMachine {
+    - _state_list: list[State]
+    - _current_active_state_idx_list: list[int]
+    - _next_active_state_idx_list: list[int]
+    - _event_queue: list[str]
+    - _objects[]
+
+    + __init__(): None
+    + load_application(file_path: str): bool
+    + push_event(event: str): None
+    + pop_event(): str
+    + start(): None
+    + update(): None
+    - _create_state_list(data:dict): list[State]
+    - _check_transition(event: str): int
+    - _get_next_active_state_list(pivot_state: str): list[int]
+    - _execute_on_entry(): None
+    - _execute_on_exit(): None
+    - _execute_on_while(): None
+    - _search_state_idx(state_name): int
+}
+
+State "1" -right- "*" TransitionInfo
+StateMachine "1" -- "*" State
+
+@enduml

@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 
 class State:
-    """"状態クラス
+    """状態クラス
 
     @brief 「状態」を表すクラス
     """
@@ -19,8 +19,8 @@ class State:
         self._default_child_idx: int = -1
         self._transitions: list[Transition] = []
         self._entry_activity: str = "print(f'[{self.get_name()}] on entry()')"
-        self._while_activity: str = "print(f'[{self.get_name()}] on exit()')"
-        self._exit_activity: str = "print(f'[{self.get_name()}] on while()')"
+        self._while_activity: str = "print(f'[{self.get_name()}] on while()')"
+        self._exit_activity: str = "print(f'[{self.get_name()}] on exit()')"
         self._objects = objects
 
     def get_name(self) -> str:
@@ -172,7 +172,7 @@ class TransitionInfo:
         return True
 
 class StateMachine:
-    def __init__(self):
+    def __init__(self) -> None:
         self._state_list: list[State] = []
         self._current_active_state_idx_list: list[int] = []
         self._next_active_state_idx_list: list[int] = []
@@ -322,7 +322,7 @@ class StateMachine:
         print(f'State List:')
         for state in self._state_list:
             print(f'\t{state.get_name()}')
-        print(f'Currect Active State List:')
+        print(f'Current Active State List:')
         for idx in self._current_active_state_idx_list:
             print(f'\t{self._state_list[idx].get_name()}')
         print(f'Next Active State List:')
