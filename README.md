@@ -20,6 +20,61 @@
         :~$ cd QibiTech/src
         :~/QibiTech/src$ python3 state_machine.py
         ```
+  * 動作の確認方法
+    状態遷移は、外部ファイル`application.json`に定義しています。上記の起動方法に従って実行すると定義した内容で実行され、その結果が標準出力に表示されます。  
+    今回添付した`application.json`では、以下の内容が表示されます。
+    表示は、以下の書式で表示されます。
+
+    * [<アクティブな状態名>] <実行されたアクティビティ>
+    * EVENT: <入力イベント名>
+
+    ```
+    QibiTech\src>python state_machine.py
+    load_application : True
+    State List:
+        ROOT
+        POWER OFF
+        POWER ON
+        LAMP OFF
+        LAMP ON
+    Current Active State List:
+    Next Active State List:
+        ROOT
+        POWER OFF
+    [ROOT] on entry()
+    [POWER OFF] on entry()
+    [ROOT] ルートの活性化中の活動
+    [POWER OFF] on while()
+
+    EVENT: SW_ON
+    [POWER OFF] on exit()
+    [POWER ON] on entry()
+    [LAMP OFF] ランプ消灯
+    [ROOT] ルートの活性化中の活動
+    [POWER ON] on while()
+    [LAMP OFF] on while()
+
+    EVENT: BTN_PUSH
+    [LAMP OFF] on exit()
+    [LAMP ON] ランプ点灯
+    [ROOT] ルートの活性化中の活動
+    [POWER ON] on while()
+    [LAMP ON] on while()
+
+    EVENT: BTN_PUSH
+    [LAMP ON] on exit()
+    [LAMP OFF] ランプ消灯
+    [ROOT] ルートの活性化中の活動
+    [POWER ON] on while()
+    [LAMP OFF] on while()
+
+    EVENT: SW_OFF
+    [POWER ON] on exit()
+    [LAMP OFF] on exit()
+    [POWER OFF] on entry()
+    [ROOT] ルートの活性化中の活動
+    [POWER OFF] on while()
+    ```
 
 ## プログラムの構成や背景（発想や狙い）
 ### プログラムの構成

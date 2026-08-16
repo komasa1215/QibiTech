@@ -2,11 +2,10 @@ from __future__ import annotations
 import json
 
 class State:
-    """状態クラス
-
+    """
     @brief 「状態」を表すクラス
     """
-    def __init__(self, name: str, parent: str, objects) -> None:
+    def __init__(self, name: str, parent: str) -> None:
         """
         @brief コンストラクタ
         @param name 状態の名称
@@ -20,8 +19,7 @@ class State:
         self._transitions: list[Transition] = []
         self._entry_activity: str = "print(f'[{self.get_name()}] on entry()')"
         self._while_activity: str = "print(f'[{self.get_name()}] on while()')"
-        self._exit_activity: str = "print(f'[{self.get_name()}] on exit()')"
-        self._objects = objects
+        self._exit_activity: str  = "print(f'[{self.get_name()}] on exit()')"
 
     def get_name(self) -> str:
         """
@@ -125,28 +123,31 @@ class State:
         print(f"Default Child Index: {self._default_child_idx}")
         print(f"Transitions: {[(transition._target, transition._trigger) for transition in self._transitions]}")
 
-    def on_entry(self) -> None:
+    def on_entry_activity(self) -> None:
         """
         @brief エントリーアクティビティの実行
         @param なし
         @return なし
         """
+       #print(f'[DEBUG] ENTRY {self.get_name()} {self._entry_activity}')
         exec(self._entry_activity)
 
-    def on_while(self) -> None:
+    def on_while_activity(self) -> list[str]:
         """
         @brief ホワイルアクティビティの実行
         @param なし
         @return なし
         """
+       #print(f'[DEBUG] WHILE {self.get_name()} {self._while_activity}')
         exec(self._while_activity)
 
-    def on_exit(self) -> None:
+    def on_exit_activity(self) -> None:
         """
         @brief イグジットアクティビティの実行
         @param なし
         @return なし
         """
+       #print(f'[DEBUG] EXIT {self.get_name()} {self._exit_activity}')
         exec(self._exit_activity)
 
 class TransitionInfo:
@@ -172,14 +173,26 @@ class TransitionInfo:
         return True
 
 class StateMachine:
+    """
+    @brief 状態遷移エンジンのクラス
+    """
     def __init__(self) -> None:
+        """
+        @brief コンストラクタ
+        @param なし
+        @return なし
+        """
         self._state_list: list[State] = []
         self._current_active_state_idx_list: list[int] = []
         self._next_active_state_idx_list: list[int] = []
         self._event_queue: list[str] = []
-        self._objects = []
 
     def load_application(self, file_path: str) -> bool:
+        """
+        @brief アプリケーションファイルのロード
+        @param file_path アプリケーションファイルのファイル名
+        @return ロードの成功/失敗の結果
+        """
         with open(file_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
@@ -188,33 +201,44 @@ class StateMachine:
             self._next_active_state_idx_list = self._get_next_active_state_list("ROOT")
             if len(self._next_active_state_idx_list) == 0:
                 return False
-
-            # create objects
-            objects = data.get("objects", [])
-            for obj in objects:
-                tmp  = f'from {obj["source"]} import {obj["class"]}\n'
-                tmp += f'{obj["name"]} = {obj["class"]}()\n'
-                tmp += f'self._objects.append({obj["name"]})'
-                print(f'[DEBUG]\n{tmp}')
-                exec(tmp)
-
             return True
 
     def push_event(self, event: str) -> None:
+        """
+        @brief イベントのプッシュ(挿入)
+        @param event イベント(ID)
+        @return なし
+        """
         self._event_queue.append(event)
 
     def pop_event(self) -> str:
+        """
+        @brief イベントのポップ(取り出し)
+        @param なし
+        @return イベント(ID)
+        @warning イベントキューが空の場合は 'None' を返す。
+        """
         if len(self._event_queue) > 0:
             return self._event_queue.pop(0)
         return None
 
     def start(self) -> None:
+        """
+        @brief 状態遷移エンジンの開始
+        @param なし
+        @return なし
+        """
         self._execute_on_entry()
         self._current_active_state_idx_list = self._next_active_state_idx_list
         self._next_active_state_idx_list = []
         self._execute_on_while()
 
     def update(self) -> None:
+        """
+        @brief 状態遷移エンジンの更新
+        @param なし
+        @return なし
+        """
         event = self.pop_event()
         if event != None:
             pivot_state_idx = self._check_transition(event)
@@ -231,10 +255,15 @@ class StateMachine:
         self._execute_on_while()
 
     def _create_state_list(self, data:dict) -> list[State]:
+        """
+        @brief オブジェクト生成
+        @param data 生成オブジェクトのデータ
+        @return 生成オブジェクトリスト
+        """
         result: list[State] = []
         for state_data in data:
             # create State
-            tmp = State(state_data["name"], state_data["parent"], self._objects)
+            tmp = State(state_data["name"], state_data["parent"])
             # add state hierarchy
             default_child_idx = state_data["default_child"]
             for idx, child_name in enumerate(state_data["children"]):
@@ -256,6 +285,11 @@ class StateMachine:
         return result
 
     def _check_transition(self, event: str) -> int:
+        """
+        @brief イベントに対する状態遷移の判定
+        @param event イベント
+        @return 状態遷移の有無判定結果  負: 状態遷移なし その他: 状態遷移あり(遷移先状態の状態一覧のインデックス)
+        """
         for idx in self._current_active_state_idx_list:
             state = self._state_list[idx]
             for transition in state._transitions:
@@ -266,6 +300,11 @@ class StateMachine:
         return -1
 
     def _get_next_active_state_list(self, pivot_state: str) -> list[int]:
+        """
+        @brief アクティブな状態の一覧取得
+        @param pivot_state  起点となる状態の名称
+        @return アクティブな状態の一覧
+        """
         tmp_list = []
         # add pivot state
         pivot_idx = self._search_state_idx(pivot_state)
@@ -294,31 +333,56 @@ class StateMachine:
         return tmp_list
 
     def _execute_on_entry(self) -> None:
+        """
+        @brief エントリーアクティビティの実行
+        @param なし
+        @return なし
+        """
         # self._next_active_state_idx_listにしかない要素を抽出
         on_entry_list = [x for x in self._next_active_state_idx_list if x not in self._current_active_state_idx_list]
         for idx in on_entry_list:
             state = self._state_list[idx]
-            state.on_entry()
+            state.on_entry_activity()
+
+    def _execute_on_while(self) -> None:
+        """
+        @brief ホワイルアクティビティの実行
+        @param なし
+        @return なし
+        """
+        for idx in self._current_active_state_idx_list:
+            state = self._state_list[idx]
+            state.on_while_activity()
 
     def _execute_on_exit(self) -> None:
+        """
+        @brief イグジットアクティビティの実行
+        @param なし
+        @return なし
+        """
         # self._current_active_state_idx_listにしかない要素を抽出
         on_exit_list = [x for x in self._current_active_state_idx_list if x not in self._next_active_state_idx_list]
         for idx in on_exit_list:
             state = self._state_list[idx]
-            state.on_exit()
+            state.on_exit_activity()
 
-    def _execute_on_while(self) -> None:
-        for idx in self._current_active_state_idx_list:
-            state = self._state_list[idx]
-            state.on_while()
-
-    def _search_state_idx(self, state_name) -> int:
+    def _search_state_idx(self, state_name: str) -> int:
+        """
+        @brief 状態名称による状態一覧の探索
+        @param state_name 状態の名称
+        @return 状態一覧のインデックス
+        """
         for idx, state in enumerate(self._state_list):
             if state.get_name() == state_name:
                 return idx
         return -1
 
     def show(self) -> None:
+        """
+        @brief デバッグ用情報の表示
+        @param なし
+        @return なし
+        """
         print(f'State List:')
         for state in self._state_list:
             print(f'\t{state.get_name()}')
@@ -328,27 +392,19 @@ class StateMachine:
         print(f'Next Active State List:')
         for idx in self._next_active_state_idx_list:
             print(f'\t{self._state_list[idx].get_name()}')
-        print(f'Objects: ')
-        for obj in self._objects:
-            #print(f'\tCLASS: {obj["class"]}\tname: {obj["name"]}')
-            print(f'\t{obj}')
-
-    def unit_test(self) -> None:
-        import time
-
-        sm = StateMachine()
-        result = sm.load_application('application.json')
-        print(f'load_application : {result}')
-        sm.show()
-
-        event_list = ["SW_ON", "BTN_PUSH", "BTN_PUSH", "SW_OFF"]
-        sm.start()
-        for ev in event_list:
-            print(f'\nEVENT: {ev}')
-            sm.push_event(ev)
-            sm.update()
-            time.sleep(1)
 
 if __name__ == "__main__":
+    import time
+
     sm = StateMachine()
-    sm.unit_test()
+    result = sm.load_application('application.json')
+    print(f'load_application : {result}')
+    sm.show()
+
+    event_list = ["SW_ON", "BTN_PUSH", "BTN_PUSH", "SW_OFF"]
+    sm.start()
+    for ev in event_list:
+        print(f'\nEVENT: {ev}')
+        sm.push_event(ev)
+        sm.update()
+        time.sleep(1)

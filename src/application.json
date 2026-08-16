@@ -1,7 +1,4 @@
 {
-    "objects": [
-        { "source": "lamp", "class": "Lamp", "name": "lamp"}
-    ],
     "states": [
         {
         "name": "ROOT",
@@ -10,7 +7,7 @@
         "default_child": 0,
         "transitions": [ ],
         "do_entry": [],
-        "do_while": [ "print('ルートの活性化中の活動')" ],
+        "do_while": [ "print('[ROOT] ルートの活性化中の活動')" ],
         "do_exit": []
         },
         {
@@ -39,7 +36,7 @@
         "children": [],
         "default_child": -1,
         "transitions": [ { "target": "LAMP ON",  "trigger": "BTN_PUSH" } ],
-        "do_entry": [ "print('ランプ消灯')", "self.lamp.off()" ],
+        "do_entry": [ "print('[LAMP OFF] ランプ消灯')" ],
         "do_while": [],
         "do_exit": []
         },
@@ -49,7 +46,7 @@
         "children": [],
         "default_child": -1,
         "transitions": [ { "target": "LAMP OFF",  "trigger": "BTN_PUSH" } ],
-        "do_entry": [ "print('ランプ点灯')", "self.lamp.on()" ],
+        "do_entry": [ "print('[LAMP ON] ランプ点灯')" ],
         "do_while": [],
         "do_exit": []
         }
