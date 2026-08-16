@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lamp_0',['Lamp',['../namespace_lamp.html',1,'']]]
+  ['state_5fmachine_0',['state_machine',['../namespacestate__machine.html',1,'']]]
 ];

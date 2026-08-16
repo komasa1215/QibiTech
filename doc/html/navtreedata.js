@@ -49,7 +49,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_lamp_8py.html"
+"annotated.html"
 ];
 
 const SYNCONMSG = 'クリックで同期表示が無効になります';

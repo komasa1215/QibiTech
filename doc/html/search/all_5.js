@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['lamp_0',['Lamp',['../class_lamp_1_1_lamp.html',1,'Lamp.Lamp'],['../namespace_lamp.html',1,'Lamp']]],
-  ['lamp_2epy_1',['Lamp.py',['../_lamp_8py.html',1,'']]],
-  ['load_5fapplication_2',['load_application',['../classstate__machine_1_1_state_machine.html#ab33c3504c7f21fb338c84efbb9b8fb44',1,'state_machine::StateMachine']]]
+  ['get_5fdefault_5fchild_5fname_0',['get_default_child_name',['../classstate__machine_1_1_state.html#ac6af104cbe32d845287db97cd80f1755',1,'state_machine::State']]],
+  ['get_5fname_1',['get_name',['../classstate__machine_1_1_state.html#abb0b25e7643a9d4e15868ec6ad0a741f',1,'state_machine::State']]],
+  ['get_5fparent_5fname_2',['get_parent_name',['../classstate__machine_1_1_state.html#a468c9fbbe323c8d3ea25eaa20b79d7cc',1,'state_machine::State']]]
 ];

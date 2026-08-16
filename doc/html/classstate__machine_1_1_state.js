@@ -1,6 +1,6 @@
 var classstate__machine_1_1_state =
 [
-    [ "__init__", "classstate__machine_1_1_state.html#a69842d559062fc3a9591b406b42cce3c", null ],
+    [ "__init__", "classstate__machine_1_1_state.html#a642a71545688c22bb17552b43f026f1c", null ],
     [ "add_child", "classstate__machine_1_1_state.html#ac744fc8c12cce4d9a25bdc9f406cd8cd", null ],
     [ "add_transition", "classstate__machine_1_1_state.html#af9d1ede834d107c9b457fd342e3d1f92", null ],
     [ "define_entry_activity", "classstate__machine_1_1_state.html#a09b7caeb824d4217d554e53dacbca28d", null ],
@@ -9,9 +9,9 @@ var classstate__machine_1_1_state =
     [ "get_default_child_name", "classstate__machine_1_1_state.html#ac6af104cbe32d845287db97cd80f1755", null ],
     [ "get_name", "classstate__machine_1_1_state.html#abb0b25e7643a9d4e15868ec6ad0a741f", null ],
     [ "get_parent_name", "classstate__machine_1_1_state.html#a468c9fbbe323c8d3ea25eaa20b79d7cc", null ],
-    [ "on_entry", "classstate__machine_1_1_state.html#adcd19040530e43f093d9c9343641bee9", null ],
-    [ "on_exit", "classstate__machine_1_1_state.html#a69ae8e879396b7577827eda7986f92cb", null ],
-    [ "on_while", "classstate__machine_1_1_state.html#ad911ae1c7f6fa03e0ca0989c408a7ab0", null ],
+    [ "on_entry_activity", "classstate__machine_1_1_state.html#ac995d3513054c1a3ef36f3892f6a4be5", null ],
+    [ "on_exit_activity", "classstate__machine_1_1_state.html#ab962a93257ae9756a967f647a237cb05", null ],
+    [ "on_while_activity", "classstate__machine_1_1_state.html#ace8e78e63bbc6007273fc3952a05d5af", null ],
     [ "show", "classstate__machine_1_1_state.html#ab23f2705b81dc1bf83b8334f7b87ff67", null ],
     [ "_children", "classstate__machine_1_1_state.html#ab8732c8644738ca799ef5124bbdc9b6e", null ],
     [ "_default_child_idx", "classstate__machine_1_1_state.html#a296a5ae1439c9cb518c25638ab2d696e", null ],
